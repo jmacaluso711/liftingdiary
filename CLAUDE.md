@@ -11,9 +11,10 @@ When implementing features or making changes:
 2. **Read and understand** the relevant documentation thoroughly
 3. **Then**, generate code that adheres to the patterns, conventions, and best practices outlined in those docs
 
-- /docs/ui.md
+This ensures consistency, follows established patterns, and prevents reinventing solutions that are already documented:
 
-This ensures consistency, follows established patterns, and prevents reinventing solutions that are already documented.
+- /docs/ui.md
+- /docs/data-fetching.md
 
 ## Project Overview
 
