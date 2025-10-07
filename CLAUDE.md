@@ -15,6 +15,8 @@ This ensures consistency, follows established patterns, and prevents reinventing
 
 - /docs/ui.md
 - /docs/data-fetching.md
+- /docs/auth.md
+- /docs/data-mutations.md
 
 ## Project Overview
 

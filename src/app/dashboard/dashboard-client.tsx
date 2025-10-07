@@ -2,8 +2,11 @@
 
 import { useState, useTransition } from 'react';
 import { format } from 'date-fns';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { getWorkoutsForDate } from './actions';
 
 type Workout = {
@@ -25,11 +28,16 @@ export function DashboardClient({ initialWorkouts, initialDate }: DashboardClien
   const [date, setDate] = useState<Date>(initialDate);
   const [workouts, setWorkouts] = useState<Workout[]>(initialWorkouts);
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const handleDateChange = async (newDate: Date | undefined) => {
     if (!newDate) return;
 
     setDate(newDate);
+
+    // Update URL with date query parameter
+    const dateParam = format(newDate, 'yyyy-MM-dd');
+    router.push(`/dashboard?date=${dateParam}`);
 
     // Fetch workouts for the new date using server action
     startTransition(async () => {
@@ -79,6 +87,9 @@ export function DashboardClient({ initialWorkouts, initialDate }: DashboardClien
               <div className="text-center py-12 text-muted-foreground">
                 <p>No workouts logged for this date.</p>
                 <p className="text-sm mt-2">Start tracking your fitness journey!</p>
+                <Button asChild className="mt-6">
+                  <Link href="/dashboard/workout/new">Log New Workout</Link>
+                </Button>
               </div>
             ) : (
               <div className="space-y-4">
