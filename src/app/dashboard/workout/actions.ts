@@ -51,7 +51,7 @@ export async function createWorkoutAction(data: {
   } catch (error) {
     // Handle Zod validation errors
     if (error instanceof z.ZodError) {
-      return { error: 'Invalid input', details: error.errors };
+      return { error: 'Invalid input', details: error.issues };
     }
 
     // Handle other errors
@@ -98,7 +98,7 @@ export async function updateWorkoutAction(data: {
   } catch (error) {
     // Handle Zod validation errors
     if (error instanceof z.ZodError) {
-      return { error: 'Invalid input', details: error.errors };
+      return { error: 'Invalid input', details: error.issues };
     }
 
     // Handle other errors
