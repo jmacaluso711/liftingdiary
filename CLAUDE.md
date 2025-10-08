@@ -13,10 +13,12 @@ When implementing features or making changes:
 
 This ensures consistency, follows established patterns, and prevents reinventing solutions that are already documented:
 
-- /docs/ui.md
-- /docs/data-fetching.md
 - /docs/auth.md
+- /docs/data-fetching.md
 - /docs/data-mutations.md
+- /docs/routing.md
+- /docs/server-components.md
+- /docs/ui.md
 
 ## Project Overview
 

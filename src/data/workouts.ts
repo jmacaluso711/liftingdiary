@@ -102,3 +102,28 @@ export async function createWorkout(data: {
 
   return workout;
 }
+
+/**
+ * Updates a workout with user verification
+ */
+export async function updateWorkout(
+  workoutId: number,
+  userId: string,
+  data: { name?: string; startedAt?: Date }
+) {
+  const [workout] = await db
+    .update(workouts)
+    .set({
+      ...data,
+      updatedAt: new Date(),
+    })
+    .where(
+      and(
+        eq(workouts.id, workoutId),
+        eq(workouts.userId, userId)
+      )
+    )
+    .returning();
+
+  return workout ?? null;
+}
