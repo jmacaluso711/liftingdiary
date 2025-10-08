@@ -94,35 +94,37 @@ export function DashboardClient({ initialWorkouts, initialDate }: DashboardClien
             ) : (
               <div className="space-y-4">
                 {workouts.map((workout) => (
-                  <Card key={workout.id}>
-                    <CardHeader>
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <CardTitle className="text-lg">{workout.name}</CardTitle>
-                          <CardDescription>
-                            {format(new Date(workout.startedAt), 'h:mm a')}
-                          </CardDescription>
+                  <Link key={workout.id} href={`/dashboard/workout/${workout.id}`} className="block hover:opacity-80 transition-opacity">
+                    <Card>
+                      <CardHeader>
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <CardTitle className="text-lg">{workout.name}</CardTitle>
+                            <CardDescription>
+                              {format(new Date(workout.startedAt), 'h:mm a')}
+                            </CardDescription>
+                          </div>
+                          {workout.completedAt && (
+                            <span className="text-sm text-muted-foreground">
+                              {Math.round(
+                                (new Date(workout.completedAt).getTime() -
+                                  new Date(workout.startedAt).getTime()) /
+                                  1000 /
+                                  60
+                              )}{' '}
+                              min
+                            </span>
+                          )}
                         </div>
-                        {workout.completedAt && (
-                          <span className="text-sm text-muted-foreground">
-                            {Math.round(
-                              (new Date(workout.completedAt).getTime() -
-                                new Date(workout.startedAt).getTime()) /
-                                1000 /
-                                60
-                            )}{' '}
-                            min
-                          </span>
-                        )}
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      {/* Exercise chips would go here - currently not fetched */}
-                      <div className="text-sm text-muted-foreground">
-                        {workout.completedAt ? 'Completed' : 'In Progress'}
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardHeader>
+                      <CardContent>
+                        {/* Exercise chips would go here - currently not fetched */}
+                        <div className="text-sm text-muted-foreground">
+                          {workout.completedAt ? 'Completed' : 'In Progress'}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 ))}
               </div>
             )}
