@@ -46,7 +46,7 @@ export function EditWorkoutForm({ workout }: EditWorkoutFormProps) {
           setErrors({ form: result.error });
         } else if (result?.success && result.workout) {
           // Redirect client-side on success
-          router.push(`/dashboard`);
+          router.push(`/dashboard/workout/${result.workout.id}`);
         }
       } catch (error) {
         // Handle validation errors
@@ -97,7 +97,7 @@ export function EditWorkoutForm({ workout }: EditWorkoutFormProps) {
             <Button
               type="button"
               variant="outline"
-              onClick={() => router.push('/dashboard')}
+              onClick={() => router.push(`/dashboard/workout/${workout.id}`)}
               disabled={isPending}
             >
               Cancel
