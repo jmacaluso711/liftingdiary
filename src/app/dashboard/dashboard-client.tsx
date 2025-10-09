@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { CalendarIcon } from 'lucide-react';
 import { getWorkoutsForDate } from './actions';
 
 type Workout = {
@@ -28,12 +30,14 @@ export function DashboardClient({ initialWorkouts, initialDate }: DashboardClien
   const [date, setDate] = useState<Date>(initialDate);
   const [workouts, setWorkouts] = useState<Workout[]>(initialWorkouts);
   const [isPending, startTransition] = useTransition();
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const router = useRouter();
 
   const handleDateChange = async (newDate: Date | undefined) => {
     if (!newDate) return;
 
     setDate(newDate);
+    setIsPopoverOpen(false); // Close popover when date is selected
 
     // Update URL with date query parameter
     const dateParam = format(newDate, 'yyyy-MM-dd');
@@ -50,33 +54,39 @@ export function DashboardClient({ initialWorkouts, initialDate }: DashboardClien
     <div className="container mx-auto p-6 max-w-6xl">
       <h1 className="text-3xl font-bold mb-8">Workout Dashboard</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Calendar Section */}
-        <Card className="md:col-span-1">
-          <CardHeader>
-            <CardTitle>Select Date</CardTitle>
-            <CardDescription>
-              {format(date, 'do MMM yyyy')}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex justify-center">
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={handleDateChange}
-              className="rounded-md border"
-              disabled={isPending}
-            />
-          </CardContent>
-        </Card>
-
+      <div className="grid grid-cols-1 gap-6">
         {/* Workouts List Section */}
-        <Card className="md:col-span-2">
+        <Card>
           <CardHeader>
-            <CardTitle>Workouts for {format(date, 'do MMM yyyy')}</CardTitle>
-            <CardDescription>
-              {workouts.length} workout{workouts.length !== 1 ? 's' : ''} logged
-            </CardDescription>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>Workouts for {format(date, 'do MMM yyyy')}</CardTitle>
+                <CardDescription>
+                  {workouts.length} workout{workouts.length !== 1 ? 's' : ''} logged
+                </CardDescription>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button asChild>
+                  <Link href="/dashboard/workout/new">Log New Workout</Link>
+                </Button>
+                <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="gap-2">
+                      <CalendarIcon className="h-4 w-4" />
+                      {format(date, 'do MMM yyyy')}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="end">
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      onSelect={handleDateChange}
+                      disabled={isPending}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             {isPending ? (
@@ -87,9 +97,6 @@ export function DashboardClient({ initialWorkouts, initialDate }: DashboardClien
               <div className="text-center py-12 text-muted-foreground">
                 <p>No workouts logged for this date.</p>
                 <p className="text-sm mt-2">Start tracking your fitness journey!</p>
-                <Button asChild className="mt-6">
-                  <Link href="/dashboard/workout/new">Log New Workout</Link>
-                </Button>
               </div>
             ) : (
               <div className="space-y-4">
